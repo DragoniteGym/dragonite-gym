@@ -10,7 +10,7 @@ const Main = () => {
     return(
         <div>
             <p>Welcome to Dragonite Gym. Evolve your workout!</p>
-            <Link to='/login' id='start'>Click here to get started...</Link>
+            <Link to='/login' id='start'>Login</Link>
         </div>
     )
 };
