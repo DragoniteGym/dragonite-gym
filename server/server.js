@@ -18,6 +18,7 @@ const server = createServer(app);
 // attach socket.io to the server
 const io = new Server(server);
 
+
 // handle socket.io connections
 io.on('connection', (socket) => {
   console.log('A user connected');
