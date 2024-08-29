@@ -29,9 +29,16 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
+  // handle username(testing before db)
+  socket.on('set username', (username) => {
+    console.log('username created:', username);
+    socket.username = username;
+  });
+
+  // handle messages
   socket.on('chat message', (msg) => {
     console.log('Message received on server:', msg);
-    io.emit('chat message', msg);
+    io.emit('chat message', { user: socket.username, message: msg });
   });
 
   //handle socket.io disconnect

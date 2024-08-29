@@ -12,8 +12,15 @@ const socket = io('http://localhost:3000');
 const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
+    const [username, setUsername] = useState('');
 
     useEffect(() => {
+        // testing user before db setup
+        const user = prompt('Enter username');
+        setUsername(user);
+        console.log('username:', user);
+        socket.emit('set username', user);
+
         socket.on('chat message', (msg) => {
             console.log('message received on client:', msg);
             setMessages((prevMessages) => [...prevMessages, msg]);
@@ -36,14 +43,23 @@ const Chat = () => {
     return (
         <div>
             <div>
-                <p>This is the Profile Page</p>
+                <p>This is the Chat Page</p>
                 <p><Link to='/home' id='home'>Home</Link></p>
                 <p><Link to='/' id='landing'>Sign Out</Link></p>
             </div>
             <div>
                 <ul>
                     {messages.map((msg, index) => (
-                        <li key={index}>{msg}</li>
+                        <li key={index}
+                            style={{
+                                textAlign: msg.user === username ? 'right' : 'left',
+                                padding: '10px',
+                                alignSelf: msg.user === username ? 'flex-end' : 'flex-start',
+                                listStyleType: 'none',
+                            }}
+                        >
+                            <strong>{msg.user}</strong>: {msg.message}
+                        </li>
                     ))}
                 </ul>
             </div>
