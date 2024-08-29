@@ -11,20 +11,26 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8080' 
+}));
 
 // create HTTP server using Express app
 const server = createServer(app);
 // attach socket.io to the server
-const io = new Server(server);
-
+const io = new Server(server, {
+  cors: {
+      origin: 'http://localhost:8080', 
+      methods: ['GET', 'POST'],
+  },
+});
 
 // handle socket.io connections
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('chat meassage', (msg) => {
-    console.log('Message received: ' + msg);
+  socket.on('chat message', (msg) => {
+    console.log('Message received on server:', msg);
     io.emit('chat message', msg);
   });
 
@@ -33,7 +39,6 @@ io.on('connection', (socket) => {
     console.log('User disconnected');
   });
 });
-
 
 
 

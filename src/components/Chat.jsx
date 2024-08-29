@@ -3,64 +3,61 @@
  * @description chat message page
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 const Chat = () => {
-    const [socket, setSocket] = useState(null);
+    const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
 
     useEffect(() => {
-        // console.log
-        const newSocket = io('http://localhost:8080/');
-        // console.log
-        setSocket(newSocket);
-
-        newSocket.on('connect', () => {
-            console.log('Connected to server');
-        });
-
-        newSocket.on('chat message', (msg) => {
+        socket.on('chat message', (msg) => {
+            console.log('message received on client:', msg);
             setMessages((prevMessages) => [...prevMessages, msg]);
         });
 
-        return () => newSocket.close();
+        return () => {
+            socket.off('chat message');
+        };
     }, []);
 
-    const sendMessage = () => {
-        if (socket && input) {
-            socket.emit('chat message', input);
-            setInput('');
+    const sendMessage = (e) => {
+        e.preventDefault();
+        if (message.trim()) {
+            console.log('sending message:', message);
+            socket.emit('chat message', message);
+            setMessage('');
         }
     };
 
-    return(
+    return (
         <div>
             <div>
-                <p>This is the Chat Page</p>
+                <p>This is the Profile Page</p>
                 <p><Link to='/home' id='home'>Home</Link></p>
                 <p><Link to='/' id='landing'>Sign Out</Link></p>
             </div>
             <div>
-                <h1>Chat</h1>
-                <div>
+                <ul>
                     {messages.map((msg, index) => (
-                        <p key={index}>{msg}</p>
+                        <li key={index}>{msg}</li>
                     ))}
-                </div>
-                <input
-                    type='text'
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder='Type your message here'
-                />
-                <button onClick={sendMessage}>Send</button>
+                </ul>
             </div>
-        </div>
-
-    )
+                <form onSubmit={sendMessage}>
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Type a message..."
+                    />
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+    );
 };
 
 export default Chat;
