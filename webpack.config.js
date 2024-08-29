@@ -45,7 +45,8 @@ module.exports = {
     new NodePolyfillPlugin()
     ],
     devServer: {
-        static: path.resolve(__dirname, 'build'),
+        historyApiFallback: true,
+        static: path.join(__dirname, 'build'),
         compress: true,
         proxy: [
             {
