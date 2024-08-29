@@ -35,7 +35,7 @@ pool
 )
 //if there's an error, should console log error and then exit all processes
    .on('error', (err, client) => {
-    console.error(`SQL DB Connection Error: ${err}`);
+    console.error(`SQL DB Connection Error: ${err.message}`);
     process.exit(-1);
    }
 )
