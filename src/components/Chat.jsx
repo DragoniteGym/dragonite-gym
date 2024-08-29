@@ -53,7 +53,6 @@ const Chat = () => {
                         <li key={index}
                             style={{
                                 textAlign: msg.user === username ? 'right' : 'left',
-                                padding: '10px',
                                 alignSelf: msg.user === username ? 'flex-end' : 'flex-start',
                                 listStyleType: 'none',
                             }}
