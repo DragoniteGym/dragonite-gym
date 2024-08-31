@@ -6,30 +6,88 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 const SignUp = () => {
+    // State for form fields
+    const [username, setUsername] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
     const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Prevent the default form submission behavior
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // Prevent default form submission
 
         // Log form data to the console (for debugging)
+        console.log('Username:', username);
+        console.log('First Name:', firstname);
+        console.log('Last Name:', lastname);
         console.log('Email:', email);
         console.log('Password:', password);
 
-        // Here you would typically handle the form submission,
-        // such as sending a request to your backend to create a new user.
+        try {
+            // Send the sign-up request to your backend
+            const response = await fetch('http://localhost:3000/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    firstname,
+                    lastname,
+                    email,
+                    password_hash: password, // Backend expects this key
+                }),
+            });
 
-        // Redirect to the login page upon successful submission
-        navigate('/login');
+            // Handle the response from your backend
+            if (response.ok) {
+                console.log('Sign-up successful');
+                navigate('/login'); // Redirect to login page on success
+            } else {
+                console.error('Sign-up failed');
+            }
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+        }
     };
 
     return (
         <div>
             <p>This is the Sign Up Page</p>
             <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor='username'>Username:</label>
+                    <input
+                        type='text'
+                        id='username'
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor='firstname'>First Name:</label>
+                    <input
+                        type='text'
+                        id='firstname'
+                        value={firstname}
+                        onChange={(e) => setFirstname(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor='lastname'>Last Name:</label>
+                    <input
+                        type='text'
+                        id='lastname'
+                        value={lastname}
+                        onChange={(e) => setLastname(e.target.value)}
+                        required
+                    />
+                </div>
                 <div>
                     <label htmlFor='email'>Email:</label>
                     <input
@@ -59,3 +117,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+

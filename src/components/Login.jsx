@@ -7,19 +7,36 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
 
-    // Log the username and password to the console
-    console.log('Username:', username);
-    console.log('Password:', password);
+    try {
+      // Send a POST request to the backend with the correct data shape
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password_hash: password }), // Updated to match the required data shape
+      });
 
-    // Navigate to the home page
-    navigate('/home');
+      if (response.ok) {
+        // On successful login, redirect to the home page
+        navigate('/home');
+      } else {
+        // Handle login errors
+        const result = await response.json();
+        console.error('Login error:', result.message);
+        alert('Login failed: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('An error occurred during login.');
+    }
   };
 
   return (
@@ -27,12 +44,12 @@ const Login = () => {
       <p>This is the Login Page</p>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
           <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -63,3 +80,4 @@ const Login = () => {
 };
 
 export default Login;
+
