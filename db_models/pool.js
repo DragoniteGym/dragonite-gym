@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 //pulling configs from .env file
 const {
