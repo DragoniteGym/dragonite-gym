@@ -11,7 +11,17 @@ const handleLogin = async (req, res) => {
     const user = result.rows[0];
 
     if (user && (await bcrypt.compare(password_hash, user.password_hash))) {
-      res.status(200).json({ message: 'Login successful' });
+      // // Get the username from db using the user_id
+      // const userInfo = await pool.query('SELECT username FROM users WHERE user_id = $1', [user.user_id]);
+      // const username = userInfo.rows[0].username;
+
+      // // store user in the session
+      // req.session.user = {
+      //   id: user.user_id,
+      //   username: username,
+      // };
+
+      res.status(200).json({ message: 'Login successful', username: username });
     } else {
       res.status(401).json({ message: 'Invalid email or password' });
     }

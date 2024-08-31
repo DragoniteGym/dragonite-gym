@@ -32,9 +32,22 @@ const io = new Server(server, {
   },
 });
 
+
+
 // handle socket.io connections
 io.on('connection', (socket) => {
   console.log('A user connected');
+
+  // const session = socket.request.session;
+
+  // if (!session.user) {
+  //   socket.disconnect();
+  //   return;
+  // }
+
+  // use user info stored in session
+  // const username = session.user.username;
+  // console.log(`${username} connected`);
 
   // handle username(testing before db)
   socket.on('set username', (username) => {
@@ -43,15 +56,22 @@ io.on('connection', (socket) => {
   });
 
   // handle messages
-  socket.on('chat message', (msg) => {
-    console.log('Message received on server:', msg);
-    const timestamp = new Date().toLocaleString();
-    io.emit('chat message', { user: socket.username, message: msg, msgtime: timestamp });
+  socket.on('chat message', ({ message }) => {
+    const username = socket.username;
+    console.log(`${username} sent a message: ${message}`);
+    const messageData = {
+      username: username,
+      message: message,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    io.emit('chat message', messageData);
   });
 
   //handle socket.io disconnect
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    const username = socket.username;
+    console.log(`${username} disconnected`);
   });
 });
 

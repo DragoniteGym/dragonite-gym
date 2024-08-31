@@ -35,7 +35,7 @@ const Chat = () => {
         e.preventDefault();
         if (message.trim()) {
             console.log('sending message:', message);
-            socket.emit('chat message', message);
+            socket.emit('chat message', { username, message });
             setMessage('');
         }
     };
@@ -52,13 +52,13 @@ const Chat = () => {
                     {messages.map((msg, index) => (
                         <li key={index}
                             style={{
-                                textAlign: msg.user === username ? 'right' : 'left',
-                                alignSelf: msg.user === username ? 'flex-end' : 'flex-start',
+                                textAlign: msg.username === username ? 'right' : 'left',
+                                alignSelf: msg.username === username ? 'flex-end' : 'flex-start',
                                 listStyleType: 'none',
                             }}
                         >
-                            <strong>{msg.user}</strong>
-                            <span style={{ fontSize: '0.6em', color: 'gray' }}> {msg.msgtime} </span> <br />
+                            <strong>{msg.username}</strong>
+                            <span style={{ fontSize: '0.6em', color: 'gray' }}> {msg.timestamp} </span> <br />
                             {msg.message}
                         </li>
                     ))}
