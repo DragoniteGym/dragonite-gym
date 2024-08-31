@@ -38,7 +38,8 @@ io.on('connection', (socket) => {
   // handle messages
   socket.on('chat message', (msg) => {
     console.log('Message received on server:', msg);
-    io.emit('chat message', { user: socket.username, message: msg });
+    const timestamp = new Date().toLocaleString();
+    io.emit('chat message', { user: socket.username, message: msg, msgtime: timestamp });
   });
 
   //handle socket.io disconnect

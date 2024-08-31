@@ -57,7 +57,9 @@ const Chat = () => {
                                 listStyleType: 'none',
                             }}
                         >
-                            <strong>{msg.user}</strong>: {msg.message}
+                            <strong>{msg.user}</strong>
+                            <span style={{ fontSize: '0.6em', color: 'gray' }}> {msg.msgtime} </span> <br />
+                            {msg.message}
                         </li>
                     ))}
                 </ul>
