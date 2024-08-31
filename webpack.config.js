@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = {
     mode: 'development',
@@ -39,23 +40,28 @@ module.exports = {
             },
         ]
     },
-    plugins: [new HtmlWebPackPlugin({
-        template: 'index.html',
-    }),
-    new NodePolyfillPlugin()
+    plugins: [
+        new HtmlWebPackPlugin({
+            template: 'index.html',
+        }),
+        new NodePolyfillPlugin()
     ],
     devServer: {
         historyApiFallback: true,
         static: path.join(__dirname, 'build'),
         compress: true,
-        proxy: [
-            {
-                '/api': {
-                    target: 'https://localhost:3000',
+        setupMiddlewares: (middlewares, devServer) => {
+            devServer.app.use(
+                '/api',
+                createProxyMiddleware({
+                    target: 'http://localhost:3000', // Changed to http
                     changeOrigin: true,
-                }
-            },
-        ],
+                    secure: false // This is useful if you're not using https in development
+                })
+            );
+            return middlewares;
+        },
         port: 8080,
     }
 };
+
