@@ -38,7 +38,7 @@ const io = new Server(server, {
 // handle socket.io connections
 // Middleware to verify JWT
 const authenticateSocket = (socket, next) => {
-  const token = socket.handshake.headers['authorization']?.split(' ')[1];
+  const token = socket.handshake.query.token;
 
   if (!token) return next(new Error('Authentication error'));
 
@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
       timestamp: new Date().toLocaleString(),
     };
     console.log('username', username);
-    console.log('message:', message);
+    console.log('message:', messageData.message);
     io.emit('chat message', messageData);
   });
 
