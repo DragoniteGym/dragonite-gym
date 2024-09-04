@@ -6,6 +6,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
+import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/ChatStyles';
+import { Button, Typography, List } from '@mui/material';
+
 
 const Chat = () => {
     const [message, setMessage] = useState('');
@@ -74,39 +77,41 @@ const Chat = () => {
     };
 
     return (
-        <div>
-            <div>
-                <p>This is the Chat Page</p>
-                <p><Link to='/home' id='home'>Home</Link></p>
-                <p><Link to='/' id='landing'>Sign Out</Link></p>
-            </div>
-            <div>
-                <ul>
+        <ChatContainer>
+            <Typography variant="h4" gutterBottom>
+                Hey Bro!
+            </Typography>
+            <Typography variant="body1">
+                <Link to="/home">Home</Link> | <Link to="/">Sign Out</Link>
+            </Typography>
+            <MessageList>
+                <List>
                     {messages.map((msg, index) => (
-                        <li key={index}
-                            style={{
-                                textAlign: msg.username === username ? 'right' : 'left',
-                                alignSelf: msg.username === username ? 'flex-end' : 'flex-start',
-                                listStyleType: 'none',
-                            }}
+                        <MessageItem
+                            key={index}
+                            owner={msg.username === username ? 'own' : 'other'}
                         >
-                            <strong>{msg.username}</strong>
-                            <span style={{ fontSize: '0.6em', color: 'gray' }}> {msg.timestamp} </span> <br />
-                            {msg.message}
-                        </li>
+                            <MessageHeader>
+                                <Username>{msg.username}</Username>
+                                <Timestamp>{msg.timestamp}</Timestamp>
+                            </MessageHeader>
+                            <MessageContent>{msg.message}</MessageContent>
+                        </MessageItem>
                     ))}
-                </ul>
-            </div>
-            <form onSubmit={sendMessage}>
-                <input
-                    type="text"
+                </List>
+            </MessageList>
+            <InputContainer onSubmit={sendMessage}>
+                <Input
+                    variant="outlined"
+                    placeholder="Type a message..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Type a message..."
                 />
-                <button type="submit">Send</button>
-            </form>
-        </div>
+                <SendButton type="submit" variant="contained">
+                    Send
+                </SendButton>
+            </InputContainer>
+        </ChatContainer>
     );
 };
 
