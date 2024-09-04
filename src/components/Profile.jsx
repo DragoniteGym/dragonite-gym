@@ -13,44 +13,54 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+
 import dragonscales from '../assets/dragonscales.png';
-import exercisePhoto from '../assets/exercise.jpg';
+import absPhoto from '../assets/abs.jpg';
+import armsPhoto from '../assets/arms.jpg';
+import backPhoto from '../assets/back.jpg';
+import calvesPhoto from '../assets/calves.jpg';
+import cardioPhoto from '../assets/cardio.jpg';
+import chestPhoto from '../assets/chest.jpg';
+import glutesPhoto from '../assets/glutes.jpg';
+import legsPhoto from '../assets/legs.jpg';
+import shouldersPhoto from '../assets/shoulders.jpg';
+
 
 const bodyparts = [
     {
-      url: exercisePhoto,
+      url: absPhoto,
       title: 'Abs',
     },
     {
-      url: exercisePhoto,
+      url: armsPhoto,
       title: 'Arms',
     },
     {
-      url: exercisePhoto,
+      url: backPhoto,
       title: 'Back',
     },
     {
-      url: exercisePhoto,
+      url: calvesPhoto,
       title: 'Calves',
     },
     {
-      url: exercisePhoto,
+      url: cardioPhoto,
       title: 'Cardio',
     },
     {
-      url: exercisePhoto,
+      url: chestPhoto,
       title: 'Chest',
     },
     {
-      url: exercisePhoto,
+      url: glutesPhoto,
       title: 'Glutes',
     },
     {
-      url: exercisePhoto,
+      url: legsPhoto,
       title: 'Legs',
     },
     {
-      url: exercisePhoto,
+      url: shouldersPhoto,
       title: 'Shoulders',
     },
   ];
