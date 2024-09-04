@@ -9,6 +9,8 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 //import auth routes
 const authRoutes = require('./routes/auth');
+//import exercise search routes
+const exerciseRoutes = require('./routes/exercise.js');
 //import env var
 require('dotenv').config();
 
@@ -57,6 +59,9 @@ io.on('connection', (socket) => {
 //use auth routes
 app.use('/api/auth', authRoutes);
 
+//use exercise routes
+app.use('api/exercise', exerciseRoutes);
+
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
       console.error('Error executing query', err.stack);
@@ -72,6 +77,22 @@ console.log('Database configuration:', {
   port: process.env.POSTGRES_PORT,
   host: process.env.POSTGRES_HOST
 });
+
+app.use((req, res) => {
+  res.sendStatus(404);
+});
+
+app.use((err, req, res, next) => {
+  const defaultErr = {
+    log: 'Express error handler caught unknown middleware error',
+    status: 500,
+    message: { err: 'An error occured' },
+  };
+
+  const errorObj = Object.assign(defaultErr, err);
+
+  res.status(errorObj.status).json(errorObj.message);
+})
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
