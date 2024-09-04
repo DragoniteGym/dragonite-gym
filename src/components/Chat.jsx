@@ -4,39 +4,80 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-
-const socket = io('http://localhost:3000');
 
 const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
+    const navigate = useNavigate();
+    const [socket, setSocket] = useState(null); // Use state to store socket instance
 
     useEffect(() => {
-        // testing user before db setup
-        const user = prompt('Enter username');
-        setUsername(user);
-        console.log('username:', user);
-        socket.emit('set username', user);
+        const token = localStorage.getItem('token')
+        const newSocket = io('http://localhost:3000', {
+            transports: ['websocket'],
+            query: { token },
+        });
+        setSocket(newSocket);
 
-        socket.on('chat message', (msg) => {
+        newSocket.on('connect', () => {
+            console.log('Socket connected');
+        });
+    
+        newSocket.on('disconnect', () => {
+            console.log('Socket disconnected');
+        });
+    
+        newSocket.on('chat message', (msg) => {
+            console.log('Received chat message event');
+            console.log('username:', msg.username);
             console.log('message received on client:', msg);
             setMessages((prevMessages) => [...prevMessages, msg]);
         });
 
-        return () => {
-            socket.off('chat message');
+        const fetchUsername = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/session', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, 
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('data.username', data.username);
+                    setUsername(data.username);
+                    newSocket.emit('set username', data.username);
+                } else {
+                    navigate('/home');
+                }
+            } catch (error) {
+                console.error('Error fetching session data:', error);
+                alert('An error occurred while fetching session data.');
+            }
         };
-    }, []);
+
+        fetchUsername();
+
+        return () => {
+            newSocket.off('chat message');
+            newSocket.disconnect();
+        };
+    }, [navigate]);
 
     const sendMessage = (e) => {
         e.preventDefault();
         if (message.trim()) {
+            console.log('username', username)
             console.log('sending message:', message);
             socket.emit('chat message', { username, message });
             setMessage('');
+        } else {
+            console.error('Socket is not initialized');
         }
     };
 

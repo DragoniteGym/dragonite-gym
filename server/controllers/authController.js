@@ -1,27 +1,31 @@
 const pool = require('../../db_models/pool');
 const bcrypt = require('bcrypt'); // For hashing passwords
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const handleLogin = async (req, res) => {
   const { email, password_hash } = req.body; // Changed from password to password_hash
 
   try {
-    const result = await pool.query('SELECT * FROM login WHERE email = $1', [
+    const result = await pool.query('SELECT * FROM login l JOIN users u ON l.user_id = u.user_id WHERE l.email = $1', [
       email,
     ]);
     const user = result.rows[0];
 
     if (user && (await bcrypt.compare(password_hash, user.password_hash))) {
-      // // Get the username from db using the user_id
-      // const userInfo = await pool.query('SELECT username FROM users WHERE user_id = $1', [user.user_id]);
-      // const username = userInfo.rows[0].username;
+      // create a JWT token
+      const token = jwt.sign(
+        {
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+        },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      );
 
-      // // store user in the session
-      // req.session.user = {
-      //   id: user.user_id,
-      //   username: username,
-      // };
-
-      res.status(200).json({ message: 'Login successful', username: username });
+      res.status(200).json({ message: 'Login successful', token, username: user.username, email: user.email });
     } else {
       res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -69,7 +73,41 @@ const handleSignUp = async (req, res) => {
     }
   };
 
+// handle logout
+const handleLogout = async (req, res) => {
+  try {
+    await fetch('http://localhost:3000/api/auth/logout', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    localStorage.removeItem('token');
+    Navigate('/login');
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Error during logout:', error);
+  }  
+};
+
+// handle session
+const handleSession = async (req, res) => {
+  const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) return res.status(401).json({ message: 'Token missing' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ message: 'Invalid token' });
+
+        // Assuming you store the user info in the token
+        res.json({ username: user.username });
+    });
+};
+
 module.exports = {
   handleLogin,
   handleSignUp,
+  handleLogout,
+  handleSession,
 };

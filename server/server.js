@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const pool = require('../db_models/pool.js')
+const jwt = require('jsonwebtoken');
 
 // import http module
 const { createServer } = require('http');
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: 'http://localhost:8080',
+    credentials: true
   })
 );
 
@@ -29,48 +31,52 @@ const io = new Server(server, {
   cors: {
     origin: 'http://localhost:8080',
     methods: ['GET', 'POST'],
-  },
+    credentials: true
+  }
 });
 
-
-
 // handle socket.io connections
+// Middleware to verify JWT
+const authenticateSocket = (socket, next) => {
+  const token = socket.handshake.headers['authorization']?.split(' ')[1];
+
+  if (!token) return next(new Error('Authentication error'));
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) return next(new Error('Authentication error'));
+
+    socket.user = decoded;
+    next();
+  });
+};
+
+// Apply middleware for Socket.IO
+io.use(authenticateSocket);
+
 io.on('connection', (socket) => {
   console.log('A user connected');
+  const username = socket.user.username;
 
-  // const session = socket.request.session;
+  if (!username) {
+    socket.disconnect();
+    return;
+  }
 
-  // if (!session.user) {
-  //   socket.disconnect();
-  //   return;
-  // }
+  console.log(`${username} connected`);
 
-  // use user info stored in session
-  // const username = session.user.username;
-  // console.log(`${username} connected`);
-
-  // handle username(testing before db)
-  socket.on('set username', (username) => {
-    console.log('username created:', username);
-    socket.username = username;
-  });
-
-  // handle messages
-  socket.on('chat message', ({ message }) => {
-    const username = socket.username;
-    console.log(`${username} sent a message: ${message}`);
+  socket.on('chat message', (msg) => {
+    console.log('emitting chat message:', msg);
     const messageData = {
-      username: username,
-      message: message,
+      username: socket.user.username,
+      message: msg.message,
       timestamp: new Date().toLocaleString(),
     };
-
+    console.log('username', username);
+    console.log('message:', message);
     io.emit('chat message', messageData);
   });
 
-  //handle socket.io disconnect
   socket.on('disconnect', () => {
-    const username = socket.username;
     console.log(`${username} disconnected`);
   });
 });
@@ -78,13 +84,6 @@ io.on('connection', (socket) => {
 //use auth routes
 app.use('/api/auth', authRoutes);
 
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-      console.error('Error executing query', err.stack);
-  } else {
-      console.log('Query result:', res.rows);
-  }
-});
 
 console.log('Database configuration:', {
   user: process.env.POSTGRES_USER,
