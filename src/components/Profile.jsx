@@ -5,6 +5,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateExercises } from '../reducers/exerciseReducer';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -53,12 +55,16 @@ const bodyparts = [
     },
   ];
 
-  const getExercises = (value) => {
-    alert(`Navigating to your saved ${value} exercises. Let's go bro!`);
-    // Use dispatch to update state with correct muscle group
-  }
-
 const Profile = () => {
+
+    const dispatch = useDispatch();
+    
+    const getExercises = (value) => {
+        // Use dispatch to update state with correct muscle group
+        dispatch(updateExercises(value));
+        alert(`Navigating to your saved ${value} exercises. Let's go bro!`);
+      }
+
     return(
         <><div>
         <p>This is the Profile Page</p>

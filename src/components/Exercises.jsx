@@ -3,8 +3,9 @@
  * @description loads exercises from database
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -66,13 +67,21 @@ const workouts = [
     },
   ];
 
-  // Create load exercises function
-    // Fetch exercises from DB using user_id and muscle group name (/exercises/?)
-        // Use useEffect to make API call when page renders?
-    // Load response from DB into array
-    // Populate cards with array info
-
 const Exercises = () => {
+
+    const { bodypart } = useSelector(state => state.exercises);
+    const { user_id } = useSelector(state => state.user);
+
+    // Create load exercises function
+        // Fetch exercises from DB using user_id and muscle group name (get from state)
+        // Load response from DB into array
+        // Populate cards with array info
+
+    useEffect(() => {
+        // Use useEffect to make API call when page renders?
+        alert(`You selected ${bodypart} and your user_id is ${user_id}`);
+      }, []);
+
     return(
         <><div>
         <p>Here are your saved exercises!</p>
