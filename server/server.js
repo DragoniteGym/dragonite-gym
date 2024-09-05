@@ -12,6 +12,8 @@ const { Server } = require('socket.io');
 const authRoutes = require('./routes/auth');
 //import env var
 require('dotenv').config();
+//import exercise routes
+const exerciseRoutes = require('./routes/exercise')
 
 const app = express();
 const port = 3000;
@@ -83,6 +85,9 @@ io.on('connection', (socket) => {
 
 //use auth routes
 app.use('/api/auth', authRoutes);
+
+//use exercise routes
+app.use('/api/exercise', exerciseRoutes);
 
 
 console.log('Database configuration:', {
