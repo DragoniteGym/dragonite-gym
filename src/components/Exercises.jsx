@@ -76,9 +76,36 @@ const Exercises = () => {
         // Fetch exercises from DB using user_id and muscle group name (get from state)
         // Load response from DB into array
         // Populate cards with array info
+    
+    const loadExercises = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/savedWorkouts/getWorkouts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ bodypart, user: user_id}),
+        });
+
+        if (response.ok) {
+          // If successful, update state with saved workouts
+          const result = await response.json();
+          console.log(result);
+          console.log(result);
+          console.log(result);
+        } else {
+          // Handle retrieval errors
+          const result = await response.json();
+          console.error('Error retrieving saved workouts:', result);
+        }
+      } catch (err) {
+        console.log('Error in loadExercises:', err);
+      }
+    };
 
     useEffect(() => {
         // Use useEffect to make API call when page renders?
+        loadExercises();
         alert(`You selected ${bodypart} and your user_id is ${user_id}`);
       }, []);
 
