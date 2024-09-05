@@ -35,7 +35,6 @@ const io = new Server(server, {
   }
 });
 
-// handle socket.io connections
 // Middleware to verify JWT
 const authenticateSocket = (socket, next) => {
   const token = socket.handshake.query.token;
@@ -53,6 +52,7 @@ const authenticateSocket = (socket, next) => {
 // Apply middleware for Socket.IO
 io.use(authenticateSocket);
 
+// handle socket.io connection
 io.on('connection', (socket) => {
   console.log('A user connected');
   const username = socket.user.username;

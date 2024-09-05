@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/ChatStyles';
+import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/chatStyles';
 import { Button, Typography, List } from '@mui/material';
 
 
@@ -78,12 +78,11 @@ const Chat = () => {
 
     return (
         <ChatContainer>
-            <Typography variant="h4" gutterBottom>
-                Hey Bro!
-            </Typography>
-            <Typography variant="body1">
-                <Link to="/home">Home</Link> | <Link to="/">Sign Out</Link>
-            </Typography>
+            <div>
+                <p>This is the Chat Page</p>
+                <p><Link to='/home' id='home'>Home</Link></p>
+                <p><Link to='/' id='landing'>Sign Out</Link></p>
+            </div>
             <MessageList>
                 <List>
                     {messages.map((msg, index) => (

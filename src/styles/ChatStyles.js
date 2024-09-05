@@ -18,6 +18,10 @@ export const MessageList = styled(Paper)(({ theme }) => ({
     flex: 1,
     padding: theme.spacing(2),
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    height: '60vh',
+    width: '80%',
+    maxHeight: '400px',
+    margin: 'auto',
 }));
 
 export const MessageItem = styled(ListItem)(({ theme, owner }) => ({
@@ -58,6 +62,9 @@ export const InputContainer = styled('form')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(1),
+    width: '80%',
+    margin: 'auto',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
 }));
 
 export const Input = styled(TextField)(({ theme }) => ({

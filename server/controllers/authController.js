@@ -100,7 +100,6 @@ const handleSession = async (req, res) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
 
-        // Assuming you store the user info in the token
         res.json({ username: user.username });
     });
 };
