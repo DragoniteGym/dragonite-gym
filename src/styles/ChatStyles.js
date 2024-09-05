@@ -5,7 +5,7 @@ import dragonscales from '../assets/dragonscales.png'
 export const ChatContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
+    height: '80vh',
     justifyContent: 'space-between',
     backgroundImage: `url(${dragonscales})`,
     backgroundSize: 'center',
@@ -17,8 +17,8 @@ export const MessageList = styled(Paper)(({ theme }) => ({
     overflowY: 'auto',
     flex: 1,
     padding: theme.spacing(2),
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    height: '60vh',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    height: '50vh',
     width: '80%',
     maxHeight: '400px',
     margin: 'auto',
@@ -41,12 +41,14 @@ export const MessageHeader = styled('div')(({ theme }) => ({
 export const Username = styled(Typography)(({ theme }) => ({
     fontWeight: 'bold',
     marginRight: theme.spacing(1),
+    fontFamily: 'Courier New, monospace',
 }));
 
 export const Timestamp = styled(Typography)(({ theme }) => ({
     fontSize: '0.6em',
     color: 'gray',
     marginRight: theme.spacing(1),
+    fontFamily: 'Courier New, monospace',
 }));
 
 export const MessageContent = styled(Typography)(({ theme }) => ({
@@ -56,6 +58,7 @@ export const MessageContent = styled(Typography)(({ theme }) => ({
     padding: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[1],
+    fontFamily: 'Courier New, monospace'
 }));
 
 export const InputContainer = styled('form')(({ theme }) => ({
@@ -65,6 +68,7 @@ export const InputContainer = styled('form')(({ theme }) => ({
     width: '80%',
     margin: 'auto',
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    fontFamily: 'Arial, sans-serif',
 }));
 
 export const Input = styled(TextField)(({ theme }) => ({
@@ -73,7 +77,8 @@ export const Input = styled(TextField)(({ theme }) => ({
     backgroundColor: 'white',
     '& .MuiInputBase-input': {
         color: 'black',
-    },
+        fontFamily: 'Arial, sans-serif',
+    },    
 }));
 
 export const SendButton = styled(Button)(({ theme }) => ({
@@ -82,5 +87,6 @@ export const SendButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         backgroundColor: 'lightgray',
     },
+    fontFamily: 'Arial, sans-serif',
 }));
 

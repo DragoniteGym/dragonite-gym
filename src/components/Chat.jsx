@@ -3,7 +3,7 @@
  * @description chat message page
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/chatStyles';
@@ -15,8 +15,10 @@ const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
-    const navigate = useNavigate();
     const [socket, setSocket] = useState(null);
+    const navigate = useNavigate();
+    const messageEndRef = useRef(null);
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -67,6 +69,11 @@ const Chat = () => {
         };
     }, [navigate]);
 
+    // scroll to bottom
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
     const sendMessage = (e) => {
         e.preventDefault();
         if (message.trim()) {
@@ -78,12 +85,12 @@ const Chat = () => {
     };
 
     return (
-        <ChatContainer>
-            <div>
+            <><div>
                 <p>This is the Chat Page</p>
                 <p><Link to='/home' id='home'>Home</Link></p>
                 <p><Link to='/' id='landing' onClick={logout}>Sign Out</Link></p>
             </div>
+            <ChatContainer>
             <MessageList>
                 <List>
                     {messages.map((msg, index) => (
@@ -98,6 +105,7 @@ const Chat = () => {
                             <MessageContent>{msg.message}</MessageContent>
                         </MessageItem>
                     ))}
+                    <div ref={messageEndRef} />
                 </List>
             </MessageList>
             <InputContainer onSubmit={sendMessage}>
@@ -111,7 +119,7 @@ const Chat = () => {
                     Send
                 </SendButton>
             </InputContainer>
-        </ChatContainer>
+        </ChatContainer></>
     );
 };
 
