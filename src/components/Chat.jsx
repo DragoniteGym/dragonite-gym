@@ -4,74 +4,113 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
+import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/chatStyles';
+import { Button, Typography, List } from '@mui/material';
 
-const socket = io('http://localhost:3000');
 
 const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
+    const navigate = useNavigate();
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        // testing user before db setup
-        const user = prompt('Enter username');
-        setUsername(user);
-        console.log('username:', user);
-        socket.emit('set username', user);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/home');
+            return;
+        }
 
-        socket.on('chat message', (msg) => {
-            console.log('message received on client:', msg);
+        const newSocket = io('http://localhost:3000', {
+            transports: ['websocket'],
+            query: { token },
+        });
+        setSocket(newSocket);
+
+        const fetchUsername = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/session', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsername(data.username);
+                    newSocket.emit('set username', data.username);
+                } else {
+                    navigate('/home');
+                }
+            } catch (error) {
+                console.error('Error fetching session data:', error);
+                alert('An error occurred while fetching session data.');
+            }
+        };
+
+        fetchUsername();
+
+        newSocket.on('chat message', (msg) => {
+            console.log('Received chat message:', msg);
             setMessages((prevMessages) => [...prevMessages, msg]);
         });
 
         return () => {
-            socket.off('chat message');
+            newSocket.off('chat message');
+            newSocket.disconnect();
         };
-    }, []);
+    }, [navigate]);
 
     const sendMessage = (e) => {
         e.preventDefault();
         if (message.trim()) {
-            console.log('sending message:', message);
-            socket.emit('chat message', message);
+            socket.emit('chat message', { username, message });
             setMessage('');
+        } else {
+            console.error('Message cannot be empty');
         }
     };
 
     return (
-        <div>
+        <ChatContainer>
             <div>
                 <p>This is the Chat Page</p>
                 <p><Link to='/home' id='home'>Home</Link></p>
                 <p><Link to='/' id='landing'>Sign Out</Link></p>
             </div>
-            <div>
-                <ul>
+            <MessageList>
+                <List>
                     {messages.map((msg, index) => (
-                        <li key={index}
-                            style={{
-                                textAlign: msg.user === username ? 'right' : 'left',
-                                alignSelf: msg.user === username ? 'flex-end' : 'flex-start',
-                                listStyleType: 'none',
-                            }}
+                        <MessageItem
+                            key={index}
+                            owner={msg.username === username ? 'own' : 'other'}
                         >
-                            <strong>{msg.user}</strong>: {msg.message}
-                        </li>
+                            <MessageHeader>
+                                <Username>{msg.username}</Username>
+                                <Timestamp>{msg.timestamp}</Timestamp>
+                            </MessageHeader>
+                            <MessageContent>{msg.message}</MessageContent>
+                        </MessageItem>
                     ))}
-                </ul>
-            </div>
-                <form onSubmit={sendMessage}>
-                    <input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type a message..."
-                    />
-                    <button type="submit">Send</button>
-                </form>
-            </div>
+                </List>
+            </MessageList>
+            <InputContainer onSubmit={sendMessage}>
+                <Input
+                    variant="outlined"
+                    placeholder="Type a message..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
+                <SendButton type="submit" variant="contained">
+                    Send
+                </SendButton>
+            </InputContainer>
+        </ChatContainer>
     );
 };
 
