@@ -10,8 +10,6 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 //import auth routes
 const authRoutes = require('./routes/auth');
-//import exercise search routes
-const exerciseRoutes = require('./routes/exercise.js');
 //import env var
 require('dotenv').config();
 //import exercise routes
@@ -93,19 +91,8 @@ app.use('/api/auth', authRoutes);
 //use exercise routes
 app.use('api/exercise', exerciseRoutes);
 
-//use exercise routes
-app.use('/api/exercise', exerciseRoutes);
-
 //use saved workout routes
 app.use('/api/savedWorkouts', savedWorkoutRoutes);
-
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-      console.error('Error executing query', err.stack);
-  } else {
-      console.log('Query result:', res.rows);
-  }
-});
 
 console.log('Database configuration:', {
   user: process.env.POSTGRES_USER,
