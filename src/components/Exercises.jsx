@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import dragonscales from '../assets/dragonscales.png';
 import exercisePhoto from '../assets/exercise.jpg';
+import Navbar from './NavBar.jsx';
 
 const workouts = [
     {
@@ -83,11 +84,8 @@ const Exercises = () => {
       }, []);
 
     return(
-        <><div>
-        <p>Here are your saved exercises!</p>
-        <p><Link to='/profile' id='profile'>Profile</Link></p>
-        <p><Link to='/' id='landing'>Sign Out</Link></p>
-        </div>
+        <>
+        <Navbar />
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {workouts.map((workout) => (

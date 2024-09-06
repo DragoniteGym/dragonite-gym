@@ -5,7 +5,7 @@ import dragonscales from '../assets/dragonscales.png'
 export const ChatContainer = styled(Container)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
-    height: '80vh',
+    height: '100vh',
     justifyContent: 'space-between',
     backgroundImage: `url(${dragonscales})`,
     backgroundSize: 'center',
@@ -58,7 +58,7 @@ export const MessageContent = styled(Typography)(({ theme }) => ({
     padding: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[1],
-    fontFamily: 'Courier New, monospace'
+    fontFamily: 'Arial, sans-serif',
 }));
 
 export const InputContainer = styled('form')(({ theme }) => ({

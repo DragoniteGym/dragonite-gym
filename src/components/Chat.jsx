@@ -9,6 +9,7 @@ import io from 'socket.io-client';
 import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/chatStyles';
 import { Button, Typography, List } from '@mui/material';
 import { logout } from '../utils/authUtils';
+import Navbar from './NavBar.jsx';
 
 
 const Chat = () => {
@@ -85,12 +86,8 @@ const Chat = () => {
     };
 
     return (
-            <><div>
-                <p>This is the Chat Page</p>
-                <p><Link to='/home' id='home'>Home</Link></p>
-                <p><Link to='/' id='landing' onClick={logout}>Sign Out</Link></p>
-            </div>
             <ChatContainer>
+            <Navbar />
             <MessageList>
                 <List>
                     {messages.map((msg, index) => (
@@ -119,7 +116,7 @@ const Chat = () => {
                     Send
                 </SendButton>
             </InputContainer>
-        </ChatContainer></>
+        </ChatContainer>
     );
 };
 

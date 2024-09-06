@@ -25,6 +25,8 @@ import glutesPhoto from '../assets/glutes.jpg';
 import legsPhoto from '../assets/legs.jpg';
 import shouldersPhoto from '../assets/shoulders.jpg';
 
+import Navbar from './NavBar.jsx';
+
 
 const bodyparts = [
     {
@@ -76,11 +78,7 @@ const Profile = () => {
       }
 
     return(
-        <><div>
-        <p>This is the Profile Page</p>
-        <p><Link to='/home' id='home'>Home</Link></p>
-        <p><Link to='/' id='landing'>Sign Out</Link></p>
-        </div>
+        <>
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {bodyparts.map((bodypart) => (
