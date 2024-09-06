@@ -5,6 +5,8 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateUserId } from '../reducers/userReducer';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -15,6 +17,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -31,6 +35,8 @@ const Login = () => {
       if (response.ok) {
         const result = await response.json();
         localStorage.setItem('token', result.token);
+        // Update state with user id for rendering saved profile
+        dispatch(updateUserId(result.id));
         navigate('/home');
       } else {
         const result = await response.json();

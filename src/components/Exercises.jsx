@@ -67,19 +67,24 @@ const Exercises = () => {
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {workouts.map((workout) => (
-            <Card key={workout.title} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: workout.width }}>
-                <CardActionArea component={Link} to={workout.link}>
+            <Card key={workout.name} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
+                <CardActionArea component={Link} to='/search'>
                     <CardMedia
                     component="img"
                     height="140"
-                    image={exercisePhoto}
-                    alt={workout.title} />
+                    image={workout.gifUrl}
+                    alt={workout.name} />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                            {workout.title}
+                            {workout.name}
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            {workout.text}
+                            <p>Equipment: {workout.equipment}</p>
+                            <p>Target: {workout.target}</p>
+                            <p>Secondary Muscles: {workout.secondaryMuscles.join(', ')}</p>
+                            {workout.instructions.map((instruction) => (
+                              <p>{instruction}</p>
+                            ))}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

@@ -7,11 +7,14 @@ const initialState = {
   bodypart: 'Cardio',
   workouts: [
     {
-      url: exercisePhoto,
-      title: 'Exercise #1',
-      text: 'This is an example workout',
-      link: '/search',
-      width: '30%',
+      bodyPart: 'string',
+      equipment: 'string',
+      gifUrl: exercisePhoto,
+      id: 'string',
+      name: 'string',
+      target: 'string',
+      secondaryMuscles: ['string'],
+      instructions: ['string'],
     },
   ],
 };

@@ -9,22 +9,24 @@ const getWorkouts = async (req, res) => {
         console.log('User:', user);
         res.status(200).json([
             {
-                title: 'Exercise #Yay',
-                text: '',
-                link: '/search',
-                width: '30%',
+                bodyPart: `${bodypart}`,
+                equipment: 'string',
+                gifUrl: 'string',
+                id: 'string',
+                name: 'string',
+                target: 'string',
+                secondaryMuscles: ['string'],
+                instructions: ['string', 'string', 'string'],
             },
             {
-                title: 'Exercise #It Worked!',
-                text: '',
-                link: '/search',
-                width: '30%',
-            },
-            {
-                title: `Exercise # ${bodypart}`,
-                text: '',
-                link: '/search',
-                width: '30%',
+                bodyPart: `${bodypart}`,
+                equipment: 'string',
+                gifUrl: 'string',
+                id: 'string',
+                name: 'string',
+                target: 'string',
+                secondaryMuscles: ['string', 'string'],
+                instructions: ['string', 'string'],
             },
         ]);
     } catch (err) {
