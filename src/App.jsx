@@ -13,6 +13,7 @@ import SignUp from './components/SignUp.jsx';
 import Home from './components/Home.jsx';
 import Search from './components/Search.jsx';
 import Profile from './components/Profile.jsx';
+import Exercises from './components/Exercises.jsx';
 import Chat from './components/Chat.jsx';
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
             <Route path='/home' element={<Home />}/>
             <Route path='/search' element={<Search />}/>
             <Route path='/profile' element={<Profile />}/>
+            <Route path='/exercises' element={<Exercises />}/>
             <Route path='/chat' element={<Chat />}/>
           </Routes>
         </BrowserRouter>

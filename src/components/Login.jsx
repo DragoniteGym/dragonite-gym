@@ -25,7 +25,11 @@ const Login = () => {
       });
 
       if (response.ok) {
-        // On successful login, redirect to the home page
+        // On successful login, get the JWT token, redirect to the home page
+        const result = await response.json();
+        localStorage.setItem('token', result.token);
+        console.log('user', result.username)
+        console.log('email', result.email);
         navigate('/home');
       } else {
         // Handle login errors
