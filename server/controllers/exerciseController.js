@@ -10,7 +10,7 @@ const options = {
 };
 
 const exerciseController = {
- 
+    // middleware for fetching list of exercises by bodypart
     getExerciseList: async (req, res, next) => {
         const { bodyPart } = req.body;
     
@@ -59,7 +59,48 @@ const exerciseController = {
                 message: { err: 'Error fetching exercise by name' },
             });
         }
-    }
+    },
+
+    //create middleware that saves exercise to the database
+    //user will click button on front end to save
+    //frontend button will send exercise id to backend
+    //save exercise id to database
+
+    saveExercise: async (req, res, next) => {
+        const { id } = req.params; // assuming id will be sent over on params
+
+        try {
+            // create query to insert into database
+            const saveIdQuery = `INSERT INTO exercises (query_id)
+                                VALUES (${ id });`
+            // save to database
+            const result = await pool.query(saveIdQuery);
+
+            // if result has no rowcount, return no content found error
+            if (result.rowCount !== 1) {
+                return res.status(204).json({ message: 'No exercises saved to database' });
+            }
+
+            return next();
+
+        } catch (err) {
+            return next({
+                log: 'Error in saveExercise middleware',
+                status: 500,
+                message: { err: 'Error saving exercise to db' },
+            });
+        }
+
+
+    },
+
+    //create middleware that will serve all execises when user checks their saved ones
+    //when user goes to that page, it will serve all the saved ones
+    //pull all the ids from database
+    //make request for each id
+    //push each object to an array
+    //serve array to frontend
+
 };
 
 module.exports = exerciseController;
