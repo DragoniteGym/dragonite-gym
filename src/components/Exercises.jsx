@@ -5,7 +5,8 @@
 
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateWorkouts } from '../reducers/exerciseReducer';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -16,70 +17,45 @@ import dragonscales from '../assets/dragonscales.png';
 import exercisePhoto from '../assets/exercise.jpg';
 import Navbar from './NavBar.jsx';
 
-const workouts = [
-    {
-      url: exercisePhoto,
-      title: 'Exercise #1',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #2',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #3',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #4',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #5',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #6',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-    {
-      url: exercisePhoto,
-      title: 'Exercise #7',
-      text: '',
-      link: '/search',
-      width: '30%',
-    },
-  ];
-
 const Exercises = () => {
+    
+    const dispatch = useDispatch();
 
     const { bodypart } = useSelector(state => state.exercises);
     const { user_id } = useSelector(state => state.user);
+    const { workouts } = useSelector(state => state.exercises);
+    
+    const loadExercises = async () => {
+      try {
+        // Fetch exercises from DB using bodypart and user_id
+        const response = await fetch('http://localhost:3000/api/savedWorkouts/getWorkouts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ bodypart, user: user_id}),
+        });
 
-    // Create load exercises function
-        // Fetch exercises from DB using user_id and muscle group name (get from state)
-        // Load response from DB into array
-        // Populate cards with array info
+        if (response.ok) {
+          // If successful, update state with saved workouts
+          const result = await response.json();
+          console.log(result);
+          console.log(result);
+          // Update state with saved workouts
+          dispatch(updateWorkouts(result));
+        } else {
+          // Handle retrieval errors
+          const result = await response.json();
+          console.error('Error retrieving saved workouts:', result);
+        }
+      } catch (err) {
+        console.log('Error in loadExercises:', err);
+      }
+    };
 
     useEffect(() => {
-        // Use useEffect to make API call when page renders?
+        // Use useEffect to make API call to database when page renders
+        loadExercises();
         alert(`You selected ${bodypart} and your user_id is ${user_id}`);
       }, []);
 
@@ -89,12 +65,12 @@ const Exercises = () => {
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {workouts.map((workout) => (
-            <Card sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: workout.width }}>
+            <Card key={workout.title} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: workout.width }}>
                 <CardActionArea component={Link} to={workout.link}>
                     <CardMedia
                     component="img"
                     height="140"
-                    image={workout.url}
+                    image={exercisePhoto}
                     alt={workout.title} />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">

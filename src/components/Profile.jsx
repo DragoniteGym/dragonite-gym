@@ -82,7 +82,7 @@ const Profile = () => {
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {bodyparts.map((bodypart) => (
-            <Card sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
+            <Card key={bodypart.title} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
                 <CardActionArea component={Link} to='/exercises' onClick={(e) => {getExercises(bodypart.title)}}>
                     <CardMedia
                     component="img"
