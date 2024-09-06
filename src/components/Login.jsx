@@ -5,6 +5,11 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import dragonscales from '../assets/dragonscales.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +20,6 @@ const Login = () => {
     event.preventDefault(); // Prevent the default form submission behavior
 
     try {
-      // Send a POST request to the backend with the correct data shape
       const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: {
@@ -25,63 +29,107 @@ const Login = () => {
       });
 
       if (response.ok) {
-        // On successful login, get the JWT token, redirect to the home page
         const result = await response.json();
         localStorage.setItem('token', result.token);
-        console.log('user', result.username)
-        console.log('email', result.email);
         navigate('/home');
       } else {
-        // Handle login errors
         const result = await response.json();
-        console.error('Login error:', result.message);
         alert('Login failed: ' + result.message);
       }
     } catch (error) {
-      console.error('Error during login:', error);
       alert('An error occurred during login.');
     }
   };
 
   return (
-    <div>
-      <p>This is the Login Page</p>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        <Link to="/signup" id="signup">
-          Sign Up
-        </Link>
-      </p>
-      <p>
-        <Link to="/" id="landing">
-          Back
-        </Link>
-      </p>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundImage: `url(${dragonscales})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100vh',
+        width: '100%',
+        padding: 2,
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: 400,
+          width: '100%',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: 2,
+          padding: 3,
+          boxShadow: 3,
+        }}
+      >
+        <Typography variant="h4" component="h1" gutterBottom>
+          Login
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              fullWidth
+              label="Email"
+              type="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Box>
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </Box>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{
+              borderRadius: 20, // Rounded corners for a sleeker look
+              padding: '10px 20px', // Adjust padding for a sleeker button
+              fontWeight: 'bold', // Make text bold for better visibility
+              boxShadow: 1, // Subtle shadow for a floating effect
+              '&:hover': {
+                boxShadow: 3, // Deeper shadow on hover
+                backgroundColor: 'rgba(0, 123, 255, 0.9)', // Slightly darker on hover
+              },
+            }}
+          >
+            Login
+          </Button>
+        </form>
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="body2">
+            <Link to="/signup" style={{ textDecoration: 'none', color: '#007bff' }}>
+              Sign Up
+            </Link>
+          </Typography>
+          <Typography variant="body2">
+            <Link to="/" style={{ textDecoration: 'none', color: '#007bff' }}>
+              Back
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
 export default Login;
+
+
 
