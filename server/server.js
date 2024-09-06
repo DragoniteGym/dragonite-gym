@@ -13,7 +13,9 @@ const authRoutes = require('./routes/auth');
 //import env var
 require('dotenv').config();
 //import exercise routes
-const exerciseRoutes = require('./routes/exercise')
+const exerciseRoutes = require('./routes/exercise');
+//import saved workout routes
+const savedWorkoutRoutes = require('./routes/savedWorkouts.js');
 
 const app = express();
 const port = 3000;
@@ -89,6 +91,8 @@ app.use('/api/auth', authRoutes);
 //use exercise routes
 app.use('/api/exercise', exerciseRoutes);
 
+//use saved workout routes
+app.use('/api/savedWorkouts', savedWorkoutRoutes);
 
 console.log('Database configuration:', {
   user: process.env.POSTGRES_USER,
