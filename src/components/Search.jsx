@@ -5,13 +5,12 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from './NavBar.jsx';
 
 const Search = () => {
     return(
         <div>
-            <p>This is the Search Page</p>
-            <p><Link to='/home' id='home'>Home</Link></p>
-            <p><Link to='/' id='landing'>Sign Out</Link></p>
+            <Navbar />
         </div>
     )
 };

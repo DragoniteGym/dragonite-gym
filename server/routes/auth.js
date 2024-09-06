@@ -9,7 +9,7 @@ router.post('/login', handleLogin);
 router.post('/signup', handleSignUp);
 
 // logout route
-router.get('/logout', handleLogout);
+router.post('/logout', handleLogout);
 
 // session route
 router.get('/session', handleSession);
