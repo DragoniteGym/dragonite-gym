@@ -121,16 +121,21 @@ const exerciseController = {
         WHERE ue.user_id = $1`
         const values = [user_id];
         const result = await pool.query(getIdQuery, values);
-
+        
+        // check if result is returned
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'No exercises found for this user' });
         }
 
+        // map over results and make urls array to give into fetchpromises
         const urls = result.rows.map((row) => `https://exercisedb.p.rapidapi.com/exercise/${row.query_id}`);
+        // map over urls and put and fetch each url with the options
         const fetchPromises = urls.map((url) => fetch(url, options).then(response => response.json()));
 
+        // create array with all the completed promises
         const resultArr = await Promise.all(fetchPromises);
 
+        // return array to front end
         return res.status(200).json(resultArr)
 
 
