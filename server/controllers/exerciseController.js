@@ -61,11 +61,6 @@ const exerciseController = {
         }
     },
 
-    //create middleware that saves exercise to the database
-    //user will click button on front end to save
-    //frontend button will send exercise id to backend
-    //save exercise id to database
-
     saveExercise: async (req, res, next) => {
         const { id } = req.params; // assuming id will be sent over on params
 
@@ -100,6 +95,8 @@ const exerciseController = {
     //make request for each id
     //push each object to an array
     //serve array to frontend
+
+    
 
 };
 
