@@ -61,7 +61,6 @@ const Exercises = () => {
 
     return(
         <>
-        <Navbar />
         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
         backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
         {workouts.map((workout) => (

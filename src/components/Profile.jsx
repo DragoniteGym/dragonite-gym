@@ -103,9 +103,23 @@ const Profile = () => {
 
     return(
         <>
-        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
-        backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
-        {bodyparts.map((bodypart) => (
+        <Box sx={{
+                backgroundImage: `url(${dragonscales})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'repeat',
+                minHeight: '100vh',
+                height: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+            }}>
+                <Navbar />
+          <Box sx={{
+                  display: 'flex', 
+                  flexWrap: 'wrap', 
+                  justifyContent: 'space-evenly',
+                  paddingTop: '50px',
+                  }}>
+          {bodyparts.map((bodypart) => (
             <Card key={bodypart.title} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
                 <CardActionArea component={Link} to='/exercises' onClick={(e) => {getExercises(bodypart.title)}}>
                     <CardMedia
@@ -124,7 +138,9 @@ const Profile = () => {
                 </CardActionArea>
             </Card>
         ))}
-        </Box></> 
+        </Box>
+        </Box>
+        </> 
     )
 };
 

@@ -62,9 +62,18 @@ const Search = () => {
 
     return(
         <>
-        <div>
-            <Navbar />
-        </div>
+            <Box sx={{
+                backgroundImage: `url(${dragonscales})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'repeat',
+                minHeight: '100vh',
+                height: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                }}>
+                <Navbar />
+            
+            </Box>
         <div sx={{margin: 10}} >
         <form>
             <TextField 
@@ -108,7 +117,7 @@ const Search = () => {
             </Card>
         ))}
         </Box>
-        </>
+    </>
     );
 };
 
