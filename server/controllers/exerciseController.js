@@ -63,20 +63,34 @@ const exerciseController = {
 
     saveExercise: async (req, res, next) => {
         const { id } = req.params; // assuming id will be sent over on params
+        const { userId } = req.body; //assuming userID can come from body
+
+        if (!id) return res.status(400).json({ message: 'Invalid ID '});
 
         try {
             // create query to insert into database
             const saveIdQuery = `INSERT INTO exercises (query_id)
-                                VALUES (${ id });`
+                                VALUES ($1) RETUNING *;`
+            const values = [id];
             // save to database
-            const result = await pool.query(saveIdQuery);
+            const result = await pool.query(saveIdQuery, values);
 
             // if result has no rowcount, return no content found error
             if (result.rowCount !== 1) {
-                return res.status(204).json({ message: 'No exercises saved to database' });
+                return res.status(201).json({ message: 'No exercises saved to database' });
             }
 
-            return next();
+            // get userID from result
+            const exerciseId = result.rows[0].exercise_id;
+
+            // add userID and exerciseID to join table to associate them
+            const saveJoinQuery = `INSERT INTO user_exercises (user_id, exercise_id)
+            VALUES ($1, $2)`;
+            const joinValues = [userId, exerciseId];
+            await pool.query(saveJoinQuery, joinValues);
+
+            // return successful message
+            return res.status(201).json({ message: 'Excersie saved and linked to user successfully' });
 
         } catch (err) {
             return next({
@@ -96,7 +110,10 @@ const exerciseController = {
     //push each object to an array
     //serve array to frontend
 
-    
+    getSavedExercise: async (req, res, next) => {
+
+        const getIdQuery = `SELECT * FROM `
+    }
 
 };
 
