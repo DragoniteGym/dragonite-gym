@@ -33,6 +33,17 @@ const NavbarLink = styled(Link)(({ theme }) => ({
     },
 }));
 
+const StyledText = styled(Typography)(({ theme }) => ({
+    textDecoration: 'none',
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    margin: theme.spacing(0.5),
+    padding: theme.spacing(1, 2),
+    fontSize: '14px',
+    border: '2px solid white',
+    borderRadius: '4px',
+}));
+
 // Styled Button for logout
 const LogoutButton = styled(Button)(({ theme }) => ({
     color: 'white',
@@ -48,8 +59,10 @@ const LogoutButton = styled(Button)(({ theme }) => ({
 const Navbar = () => {
     return (
         <NavbarContainer>
-            <Box>
-                <NavbarLink to="/">DragoniteGym</NavbarLink>
+            <Box display="flex">
+                <StyledText variant="h6">
+                    Dragonite Gym
+                </StyledText>
                 <NavbarLink to="/home">Home</NavbarLink>
                 <NavbarLink to="/search">Exercises</NavbarLink>
                 <NavbarLink to="/profile">Profile</NavbarLink>
