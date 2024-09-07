@@ -68,7 +68,7 @@ const Exercises = () => {
                 <CardActionArea component={Link} to='/search'>
                     <CardMedia
                     component="img"
-                    height="140"
+                    height="340"
                     image={workout.gifUrl}
                     alt={workout.name} />
                     <CardContent>

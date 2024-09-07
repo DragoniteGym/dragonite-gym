@@ -66,7 +66,6 @@ const Search = () => {
                 backgroundImage: `url(${dragonscales})`,
                 backgroundPosition: 'center',
                 backgroundRepeat: 'repeat',
-                minHeight: '100vh',
                 height: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
@@ -97,7 +96,7 @@ const Search = () => {
                 <CardActionArea component={Link} to={searchResult.gifUrl}>
                     <CardMedia
                     component="img"
-                    height="140"
+                    height="340"
                     image={searchResult.gifUrl}
                     alt={searchResult.name} />
                     <CardContent>
