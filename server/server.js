@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
 app.use('/api/auth', authRoutes);
 
 //use exercise routes
-app.use('api/exercise', exerciseRoutes);
+app.use('/api/exercise', exerciseRoutes);
 
 //use saved workout routes
 app.use('/api/savedWorkouts', savedWorkoutRoutes);
