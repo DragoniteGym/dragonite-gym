@@ -74,20 +74,8 @@ const handleSignUp = async (req, res) => {
   };
 
 // handle logout
-const handleLogout = async (req, res) => {
-  try {
-    await fetch('http://localhost:3000/api/auth/logout', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-    localStorage.removeItem('token');
-    Navigate('/login');
-    res.status(200).json({ message: 'Logout successful' });
-  } catch (error) {
-    console.error('Error during logout:', error);
-  }  
+const handleLogout = (req, res) => {
+  res.status(200).send({ message: 'Logout successful'});
 };
 
 // handle session

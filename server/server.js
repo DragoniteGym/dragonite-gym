@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
 app.use('/api/auth', authRoutes);
 
 //use exercise routes
-app.use('/api/exercise', exerciseRoutes);
+app.use('api/exercise', exerciseRoutes);
 
 //use saved workout routes
 app.use('/api/savedWorkouts', savedWorkoutRoutes);
@@ -101,6 +101,22 @@ console.log('Database configuration:', {
   port: process.env.POSTGRES_PORT,
   host: process.env.POSTGRES_HOST
 });
+
+app.use((req, res) => {
+  res.sendStatus(404);
+});
+
+app.use((err, req, res, next) => {
+  const defaultErr = {
+    log: 'Express error handler caught unknown middleware error',
+    status: 500,
+    message: { err: 'An error occured' },
+  };
+
+  const errorObj = Object.assign(defaultErr, err);
+
+  res.status(errorObj.status).json(errorObj.message);
+})
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
