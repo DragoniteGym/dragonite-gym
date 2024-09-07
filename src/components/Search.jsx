@@ -66,57 +66,73 @@ const Search = () => {
                 backgroundImage: `url(${dragonscales})`,
                 backgroundPosition: 'center',
                 backgroundRepeat: 'repeat',
+                minHeight: '100vh',
                 height: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
                 }}>
                 <Navbar />
-            
+                <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                <Box
+                    sx={{
+                        backgroundColor: 'white',
+                        padding: 1,
+                        borderRadius: 1,
+                        boxShadow: 1,
+                        width: '60%',
+                        maxWidth: '300px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1, 
+                    }}
+                >
+                    <TextField
+                        id='search-bar'
+                        onChange={handleSearchChange}
+                        label='Search'
+                        variant='outlined'
+                        placeholder='Search for exercises...'
+                        size='small'
+                        fullWidth
+                    />
+                    <IconButton type='submit' aria-label='search' onClick={handleSearch}>
+                        <SearchIcon style={{ fill: 'blue' }} />
+                    </IconButton>
+                </Box>
             </Box>
-        <div sx={{margin: 10}} >
-        <form>
-            <TextField 
-            id='search-bar'
-            className='text'
-            onChange={handleSearchChange}
-            label='Search'
-            variant='outlined'
-            placeholder='Search for exercises...'
-            size='large'
-            />
-            <IconButton type='submit' aria-label='search' onClick={handleSearch}>
-                <SearchIcon style={{ fill: 'blue'}} />
-            </IconButton>
-        </form>
-        </div>
-        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
-        backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
-        {searchResults.map((searchResult) => (
-            <Card key={searchResult.name} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
-                <CardActionArea component={Link} to={searchResult.gifUrl}>
-                    <CardMedia
-                    component="img"
-                    height="340"
-                    image={searchResult.gifUrl}
-                    alt={searchResult.name} />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {searchResult.name}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            <p>Equipment: {searchResult.equipment}</p>
-                            <p>Target: {searchResult.target}</p>
-                            <p>Secondary Muscles: {searchResult.secondaryMuscles.join(', ')}</p>
-                            {searchResult.instructions.map((instruction) => (
-                              <p>{instruction}</p>
-                            ))}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-            </Card>
-        ))}
-        </Box>
-    </>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly' }}>
+                {searchResults.map((searchResult) => (
+                    <Card key={searchResult.name} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: '30%' }}>
+                        <CardActionArea component={Link} to={searchResult.gifUrl}>
+                            <CardMedia
+                                component="img"
+                                height="340"
+                                image={searchResult.gifUrl}
+                                alt={searchResult.name} />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                {searchResult.name}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                    <p>Equipment: {searchResult.equipment}</p>
+                                    <p>Target: {searchResult.target}</p>
+                                    <p>Secondary Muscles: {searchResult.secondaryMuscles.join(', ')}</p>
+                                    {searchResult.instructions.map((instruction) => (
+                                    <p>{instruction}</p>
+                                    ))}
+                                </Typography>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                ))}
+                </Box>
+            </Box>
+        </>
     );
 };
 
