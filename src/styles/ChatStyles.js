@@ -41,7 +41,7 @@ export const MessageHeader = styled('div')(({ theme }) => ({
 export const Username = styled(Typography)(({ theme }) => ({
     fontWeight: 'bold',
     marginRight: theme.spacing(1),
-    fontFamily: 'Courier New, monospace',
+    fontFamily: 'Arial, sans-serif',
 }));
 
 export const Timestamp = styled(Typography)(({ theme }) => ({
@@ -54,10 +54,7 @@ export const Timestamp = styled(Typography)(({ theme }) => ({
 export const MessageContent = styled(Typography)(({ theme }) => ({
     marginTop: theme.spacing(0.5),
     textAlign: 'left',
-    backgroundColor: 'white',
     padding: theme.spacing(1),
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[1],
     fontFamily: 'Arial, sans-serif',
 }));
 

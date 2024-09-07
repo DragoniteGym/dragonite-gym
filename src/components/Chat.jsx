@@ -126,13 +126,11 @@ const Chat = () => {
               boxShadow: 1,
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-              {msg.username}
-            </Typography>
-            <Typography variant="body1">{msg.message}</Typography>
-            <Typography variant="caption" sx={{ color: 'gray', mt: 1 }}>
-              {msg.timestamp}
-            </Typography>
+            <MessageHeader>
+                <Username>{msg.username}</Username>
+                <Timestamp>{msg.timestamp}</Timestamp>
+            </MessageHeader>
+            <MessageContent>{msg.message}</MessageContent>
           </Box>
         </Box>
       ))}
