@@ -1,5 +1,5 @@
 const pool = require('../../db_models/pool');
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
 const options = {
     method: 'GET',
@@ -12,10 +12,10 @@ const options = {
 const exerciseController = {
     // middleware for fetching list of exercises by bodypart
     getExerciseList: async (req, res, next) => {
-        const { bodyPart } = req.body;
+        const { bodypart } = req.body;
     
         try {
-            const url = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodyPart}?limit=10&offset=0`;
+            const url = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${bodypart}?limit=10&offset=0`;
             const response = await fetch(url, options);
             const result = await response.json(); 
     
@@ -62,15 +62,15 @@ const exerciseController = {
     },
 
     saveExercise: async (req, res, next) => {
-        const { id } = req.params; // assuming id will be sent over on params
-        const { userId } = req.body; //assuming userID can come from body
+        const { id } = req.body; // assuming id will be sent over on params
+        const { user_id } = req.body; //assuming userID can come from body
 
         if (!id) return res.status(400).json({ message: 'Invalid ID '});
 
         try {
             // create query to insert into database
             const saveIdQuery = `INSERT INTO exercises (query_id)
-                                VALUES ($1) RETUNING *;`
+            VALUES ($1) RETUNING *;`
             const values = [id];
             // save to database
             const result = await pool.query(saveIdQuery, values);
@@ -86,7 +86,7 @@ const exerciseController = {
             // add userID and exerciseID to join table to associate them
             const saveJoinQuery = `INSERT INTO user_exercises (user_id, exercise_id)
             VALUES ($1, $2)`;
-            const joinValues = [userId, exerciseId];
+            const joinValues = [user_id, exerciseId];
             await pool.query(saveJoinQuery, joinValues);
 
             // return successful message
@@ -111,8 +111,36 @@ const exerciseController = {
     //serve array to frontend
 
     getSavedExercise: async (req, res, next) => {
+        const { user_id } = req.body
 
-        const getIdQuery = `SELECT * FROM `
+        try {
+        // query to get userid from join table
+        const getIdQuery = `SELECT e.query_id 
+        FROM exercises e 
+        INNER JOIN userexercises ue ON e.exercise_id = ue.exercise_id
+        WHERE ue.user_id = $1`
+        const values = [user_id];
+        const result = await pool.query(getIdQuery, values);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: 'No exercises found for this user' });
+        }
+
+        const urls = result.rows.map((row) => `https://exercisedb.p.rapidapi.com/exercise/${row.query_id}`);
+        const fetchPromises = urls.map((url) => fetch(url, options).then(response => response.json()));
+
+        const resultArr = await Promise.all(fetchPromises);
+
+        return res.status(200).json(resultArr)
+
+
+        } catch (err) {
+            return next({
+                log: 'Error in getSavedExercise middleware',
+                status: 500,
+                message: { err: 'Error retrieving exercises from db' },
+            })
+        }
     }
 
 };
