@@ -5,14 +5,26 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import dragonscales from '../assets/dragonscales.png';
+import Navbar from './NavBar.jsx';
 
 const Search = () => {
     return(
-        <div>
-            <p>This is the Search Page</p>
-            <p><Link to='/home' id='home'>Home</Link></p>
-            <p><Link to='/' id='landing'>Sign Out</Link></p>
-        </div>
+        <>
+            <Box sx={{
+                backgroundImage: `url(${dragonscales})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'repeat',
+                minHeight: '100vh',
+                height: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                }}>
+                <Navbar />
+            
+            </Box>
+        </>
     )
 };
 

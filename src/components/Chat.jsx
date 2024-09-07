@@ -3,19 +3,33 @@
  * @description chat message page
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { ChatContainer, MessageList, MessageItem, MessageHeader, Username, Timestamp, MessageContent, InputContainer, Input, SendButton } from '../styles/chatStyles';
-import { Button, Typography, List } from '@mui/material';
+import { Button, Typography, List, Avatar, Box } from '@mui/material';
+import { logout } from '../utils/authUtils';
+import Navbar from './NavBar.jsx';
 
+const randomAvatars = [
+    'https://i.pinimg.com/originals/e4/dd/be/e4ddbe8d788eebd423bbda64bbbc5481.jpg',
+    'https://i.pinimg.com/originals/e4/dd/be/e4ddbe8d788eebd423bbda64bbbc5481.jpg',
+
+  ];
+
+  const getRandomAvatar = () => {
+    const randomIndex = Math.floor(Math.random() * randomAvatars.length);
+    return randomAvatars[randomIndex];
+  };
 
 const Chat = () => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState('');
-    const navigate = useNavigate();
     const [socket, setSocket] = useState(null);
+    const navigate = useNavigate();
+    const messageEndRef = useRef(null);
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -66,6 +80,11 @@ const Chat = () => {
         };
     }, [navigate]);
 
+    // scroll to bottom
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
+
     const sendMessage = (e) => {
         e.preventDefault();
         if (message.trim()) {
@@ -77,27 +96,48 @@ const Chat = () => {
     };
 
     return (
-        <ChatContainer>
-            <div>
-                <p>This is the Chat Page</p>
-                <p><Link to='/home' id='home'>Home</Link></p>
-                <p><Link to='/' id='landing'>Sign Out</Link></p>
-            </div>
+            <ChatContainer>
+            <Navbar />
             <MessageList>
-                <List>
-                    {messages.map((msg, index) => (
-                        <MessageItem
-                            key={index}
-                            owner={msg.username === username ? 'own' : 'other'}
-                        >
-                            <MessageHeader>
-                                <Username>{msg.username}</Username>
-                                <Timestamp>{msg.timestamp}</Timestamp>
-                            </MessageHeader>
-                            <MessageContent>{msg.message}</MessageContent>
-                        </MessageItem>
-                    ))}
-                </List>
+            <List>
+      {messages.map((msg, index) => (
+        <Box
+          key={index}
+          sx={{
+            display: 'flex',
+            flexDirection: msg.username === username ? 'row-reverse' : 'row',
+            alignItems: 'center',
+            mb: 2,
+          }}
+        >
+          {/* Avatar */}
+          <Avatar alt={msg.username} src={getRandomAvatar()} sx={{ margin: 1 }} />
+
+          {/* Message Content */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: msg.username === username ? 'flex-end' : 'flex-start',
+              backgroundColor: msg.username === username ? '#DCF8C6' : '#FFFFFF',
+              padding: 2,
+              borderRadius: 2,
+              maxWidth: '70%',
+              boxShadow: 1,
+            }}
+          >
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+              {msg.username}
+            </Typography>
+            <Typography variant="body1">{msg.message}</Typography>
+            <Typography variant="caption" sx={{ color: 'gray', mt: 1 }}>
+              {msg.timestamp}
+            </Typography>
+          </Box>
+        </Box>
+      ))}
+      <div ref={messageEndRef} />
+    </List>
             </MessageList>
             <InputContainer onSubmit={sendMessage}>
                 <Input
