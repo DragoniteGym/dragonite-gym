@@ -61,10 +61,23 @@ const Exercises = () => {
 
     return(
         <>
-        <Navbar />
-        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly',
-        backgroundImage: `url(${dragonscales})`, minWidth: 300, width: '100%'}}>
-        {workouts.map((workout) => (
+        <Box sx={{
+                backgroundImage: `url(${dragonscales})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'repeat',
+                minHeight: '100vh',
+                height: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+            }}>
+                <Navbar />
+            <Box sx={{
+                    display: 'flex', 
+                    flexWrap: 'wrap', 
+                    justifyContent: 'space-evenly',
+                    paddingTop: '50px',
+                    }}>
+                  {workouts.map((workout) => (
             <Card key={workout.title} sx={{ maxWidth: 345, minWidth: 250, margin: 2, width: workout.width }}>
                 <CardActionArea component={Link} to={workout.link}>
                     <CardMedia
@@ -83,7 +96,9 @@ const Exercises = () => {
                 </CardActionArea>
             </Card>
         ))}
-        </Box></> 
+        </Box>
+        </Box>
+        </> 
     )
 };
 

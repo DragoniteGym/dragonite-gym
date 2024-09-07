@@ -106,7 +106,7 @@ const Landing = () => {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'black' }}>
             <TopRightBox>
-                <Link to="/login">
+                <Link to="/signup">
                     <LoginButton>
                         <PersonOutlineOutlinedIcon />
                     </LoginButton>
@@ -115,7 +115,7 @@ const Landing = () => {
 
             <ImageButton
                 focusRipple
-                component={Link} to='/home'
+                component={Link} to='/login'
             >
                 <ImageSrc />
                 <ImageBackdrop className="MuiImageBackdrop-root" />
